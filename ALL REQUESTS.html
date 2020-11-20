@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>XHR REQUESTS</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+    <h1>XHR REQUESTS</h1>
+
+<button class="btn btn-warning" onclick="loadText()">LOAD TEXT</button>
+
+<button class="btn btn-warning" onclick="getjson()">GET JSON DATA </button>
+
+<button class="btn btn-warning" onclick="getajax()">GET JSON VIA AJAX REQUEST </button>
+<hr>
+<form action="https://jsonplaceholder.typicode.com/posts" id="f1">
+  <div class="form-group">
+    <label for="email">TITLE:</label>
+    <input type="text" class="form-control" placeholder="Enter title" id="t1">
+  </div>
+  <div class="form-group">
+    <label for="pwd">BODY:</label>
+    <input type="text" class="form-control" placeholder="Enter body " id="t2">
+  </div>
+ 
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form> 
+
+
+<div class="jumbotron">
+    <div id="mydiv">
+    </div>
+</div>
+    
+<script>
+//LOAD FUNCTION
+function loadText(){
+  $('#mydiv').load('https://www.w3.org/TR/PNG/iso_8859-1.txt',function(data,status,xhr){
+    
+    console.log(data);
+    console.log(status);
+    console.log(xhr);
+    if(status=="success"){
+        alert('your text file from server is here');
+    }
+
+});
+  
+}
+
+
+
+
+//GET JSON VIA GET FUNCTION
+function getjson(){
+
+$.get('https://jsonplaceholder.typicode.com/users',function(data,status){
+
+console.log(data);
+alert(status);
+//loop
+$.each(data,function(i,e){
+$('#mydiv').append('<p>'+'<b>'+e.name+'</b><br>'+e.email+'</p><hr>');
+})
+
+
+});
+}
+
+
+
+//GET DATA VIA AJAX REQUEST
+
+function getajax(){
+
+var request=$.ajax({
+  method:'GET',
+  url:'https://gorest.co.in/public-api/products',
+  dataType:'json'
+});
+
+request.done(function(data){
+
+ console.log(data.data);
+ $.each(data.data,function(i,e){
+$('#mydiv').append('<p>'+e.name+'</p>');
+});
+
+});
+
+request.fail(function( jqXHR, textStatus ) {
+  console.log(jqXHR);
+  alert( "Request failed: " + jqXHR.statusText );
+});
+
+}
+
+
+//SUBMIT VIA JQ POST METHOD
+
+$('#form1').submit(function(e){
+
+e.preventDefault();
+
+var title=$('#t1').val();
+var body=$('#t2').val();
+var url=$(this).attr('action');
+
+$.post(url, {title:title ,body:body}).done(function(data, status, xhr){
+alert('submitted');
+
+
+console.log(data);
+console.log(status);
+console.log(xhr);
+
+});
+
+});
+
+
+
+
+
+//SUBMIT VIA AJAX
+$('#f1').submit(function(e){
+
+e.preventDefault();
+
+var title=$('#t1').val();
+var body=$('#t2').val();
+var url=$(this).attr('action');
+
+var submit_r=  $.ajax({
+            type: "POST",
+            url: url,
+            dataType: "json",
+            data: {title:title ,body:body},
+          });
+
+submit_r.done(function(data){
+  alert('submitted via ajax');
+  console.log(data)
+});
+
+});
+</script>
+
+
+
+
+
+
+</body>
+</html>
+    
